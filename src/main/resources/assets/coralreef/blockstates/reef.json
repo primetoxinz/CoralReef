@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures":{
+      "side": "coralreef:blocks/reef1",
+      "north": "#side",
+      "south": "#side",
+      "west": "#side",
+      "east": "#side",
+      "up": "#side",
+      "down": "#side",
+      "particle": "#side"
+    },
+    "model": "cube"
+  },
+  "variants": {
+    "normal": [{}],
+    "inventory": [{}],
+    "variants": {
+      "0": { "textures" : {"side":"coralreef:blocks/reef1"}},
+      "1": {"textures" : {"side":"coralreef:blocks/reef2"}}
+    }
+  }
+}
