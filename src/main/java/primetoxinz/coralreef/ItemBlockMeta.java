@@ -14,7 +14,6 @@ public class ItemBlockMeta extends ItemBlock {
         setHasSubtypes(true);
     }
 
-
     @Override
     public int getMetadata(int meta) {
         return meta;

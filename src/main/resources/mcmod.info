@@ -1,10 +1,17 @@
-[{
-  "modid": "coralreef",
-  "name": "Coral Reef",
-  "description": "Nandonalt's Coral Reef mod updated for Minecraft 1.10.2 and above.",
-  "version": "1.4",
-  "mcversion": "1.11.2",
-  "logoFile": "assets/coralreef/textures/logo.png",
-  "authorList": ["primetoxinz, Nandonalt"],
-  "credits": "Nandonalt for creating the original mod and textures"
-}]
+[
+  {
+    "modid": "coralreef",
+    "name": "Coralreef",
+    "description": "Coral Reefs",
+    "version": "${version}",
+    "mcversion": "${mcversion}",
+    "url": "",
+    "updateUrl": "",
+    "authorList": [
+      "primetoxinz"
+    ],
+    "logoFile": "",
+    "screenshots": [],
+    "dependencies": []
+  }
+]

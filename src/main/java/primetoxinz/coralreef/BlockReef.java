@@ -1,6 +1,5 @@
 package primetoxinz.coralreef;
 
-import com.google.common.base.Predicate;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -15,7 +14,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
-import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 
@@ -23,7 +21,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
  * Created by tyler on 8/17/16.
  */
 public class BlockReef extends Block {
-    public static final PropertyInteger VARIANTS = PropertyInteger.create("variants", 0, 1);
+    public static final PropertyInteger TYPES = PropertyInteger.create("types", 0, 1);
 
     public BlockReef() {
         super(Material.ROCK);
@@ -31,10 +29,6 @@ public class BlockReef extends Block {
         setHardness(1.5F);
         setResistance(10.0F);
         setSoundType(SoundType.STONE);
-        setUnlocalizedName("reef");
-        setRegistryName("reef");
-        GameRegistry.register(this);
-        GameRegistry.register(new ItemBlockMeta(this), getRegistryName());
     }
 
     @Override
@@ -45,17 +39,17 @@ public class BlockReef extends Block {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{VARIANTS});
+        return new BlockStateContainer(this, new IProperty[]{ TYPES });
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(VARIANTS, meta);
+        return getDefaultState().withProperty(TYPES, meta);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANTS);
+        return state.getValue(TYPES);
     }
 
     @Override

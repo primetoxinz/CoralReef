@@ -1,24 +1,33 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures":{
-      "side": "coralreef:blocks/reef1",
-      "north": "#side",
-      "south": "#side",
-      "west": "#side",
-      "east": "#side",
-      "up": "#side",
-      "down": "#side",
-      "particle": "#side"
+    "textures": {
+      "all": "coralreef:blocks/reef1"
     },
-    "model": "cube"
+    "model": "cube_all",
+    "uvlock": true
   },
   "variants": {
-    "normal": [{}],
-    "inventory": [{}],
-    "variants": {
-      "0": { "textures" : {"side":"coralreef:blocks/reef1"}},
-      "1": {"textures" : {"side":"coralreef:blocks/reef2"}}
+    "normal": [
+      {
+      }
+    ],
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ],
+    "types": {
+      "0": {
+        "textures": {
+          "all": "coralreef:blocks/reef1"
+        }
+      },
+      "1": {
+        "textures": {
+          "all": "coralreef:blocks/reef2"
+        }
+      }
     }
   }
 }

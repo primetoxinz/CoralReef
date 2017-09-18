@@ -13,12 +13,10 @@ import java.util.Random;
  */
 public class WorldGenRock extends WorldGenerator {
     private final IBlockState state;
-    private final int startRadius;
 
-    public WorldGenRock(IBlockState state, int startRadiusIn) {
+    public WorldGenRock(IBlockState state) {
         super(false);
         this.state = state;
-        this.startRadius = startRadiusIn;
     }
 
     public boolean generate(World worldIn, Random rand, BlockPos position) {
@@ -32,7 +30,7 @@ public class WorldGenRock extends WorldGenerator {
 
                     Block block = worldIn.getBlockState(position.down()).getBlock();
 
-                    if (block != CoralReef.reef) {
+                    if (block != CoralReef.REEF) {
                         break label0;
                     }
                 }
@@ -41,7 +39,7 @@ public class WorldGenRock extends WorldGenerator {
                     return false;
                 }
 
-                int i1 = this.startRadius;
+                int i1 = rand.nextInt(2);
 
                 for (int i = 0; i1 >= 0 && i < 3; ++i) {
                     int j = i1 + rand.nextInt(2);
