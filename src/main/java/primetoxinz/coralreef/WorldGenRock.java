@@ -1,6 +1,7 @@
 package primetoxinz.coralreef;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,43 +20,49 @@ public class WorldGenRock extends WorldGenerator {
         this.state = state;
     }
 
+    // this generates larger coral block structures on top of existing coral
+
     public boolean generate(World worldIn, Random rand, BlockPos position) {
-        while (true) {
-            label0:
-            {
-                if (position.getY() > 3) {
-                    if (worldIn.isAirBlock(position.down())) {
-                        break label0;
-                    }
+        for (; position.getY() > 3; position = position.down()) {
+            // search for a reef going downwards to Y = 3 (bedrock start?)
 
-                    Block block = worldIn.getBlockState(position.down()).getBlock();
+            if (worldIn.isAirBlock(position.down()) || worldIn.isAirBlock(position))
+                continue;
 
-                    if (block != CoralReef.REEF) {
-                        break label0;
+            Block block = worldIn.getBlockState(position.down()).getBlock();
+            if (block != CoralReef.REEF) continue;
+
+            int b = rand.nextInt(2); // : {0,1} // smaller or larger box
+
+            // do a few rounds of random placement around position
+            for (int n = 0; n < 3; ++n) {
+                int i = b + rand.nextInt(2); // : {0,1,2}
+                int j = b + rand.nextInt(2);
+                int k = b + rand.nextInt(2);
+                double f = (double) (i + j + k) / 3 + 0.5; // avg, rounded up?
+
+                // do not place box if it will center will touch air (hack, arguably should be any part of box)
+                if (worldIn.getBlockState(position.up(j+1)).getMaterial() != Material.WATER) {
+                    continue;
+                }
+
+                for (BlockPos bp : BlockPos.getAllInBox(position.add(-i, -j, -k), position.add(i, j, k))) {
+                    if (bp.distanceSq(position) <= f * f) {
+                        worldIn.setBlockState(bp, this.state);
                     }
                 }
 
-                if (position.getY() <= 3) {
-                    return false;
-                }
+                // 2+b*2 : {2,4}
+                // rand(2+b*2) : {0,1} or {0,1,2,3}
+                // rand(2+b*2) - 1 : {-1,0} or {-1,0,1,2}
+                // rand(2+b*2) - 1 - b : {-2,-1,0} or {-2,-1,0,1,2}
+                int xzstep = rand.nextInt(2 + b * 2) - b - 1;
 
-                int i1 = rand.nextInt(2);
-
-                for (int i = 0; i1 >= 0 && i < 3; ++i) {
-                    int j = i1 + rand.nextInt(2);
-                    int k = i1 + rand.nextInt(2);
-                    int l = i1 + rand.nextInt(2);
-                    float f = (float) (j + k + l) * 0.333F + 0.5F;
-                    for (BlockPos blockpos : BlockPos.getAllInBox(position.add(-j, -k, -l), position.add(j, k, l))) {
-                        if (blockpos.distanceSq(position) <= (double) (f * f)) {
-                            worldIn.setBlockState(blockpos, this.state, 4);
-                        }
-                    }
-                    position = position.add(-(i1 + 1) + rand.nextInt(2 + i1 * 2), 0 - rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
-                }
-                return true;
+                position = position.add(xzstep, -rand.nextInt(2), xzstep);
             }
-            position = position.down();
+
+            return true;
         }
+        return false;
     }
 }
