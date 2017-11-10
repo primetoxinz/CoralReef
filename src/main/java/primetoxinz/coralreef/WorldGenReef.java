@@ -20,8 +20,11 @@ public class WorldGenReef extends WorldGenerator {
 
 	public boolean generate(World worldIn, Random rand, BlockPos pos) {
 		if (isOceanFloor(worldIn, pos)) {
-			worldIn.setBlockState(pos, state);
-			CoralReef.CORAL.placeAt(worldIn, pos.up());
+			if(rand.nextInt(10) != 0) {
+				worldIn.setBlockState(pos, state);
+				if(rand.nextInt(10) != 0)
+					CoralReef.CORAL.placeAt(worldIn, pos.up());
+			}
 		}
 		return true;
 	}
