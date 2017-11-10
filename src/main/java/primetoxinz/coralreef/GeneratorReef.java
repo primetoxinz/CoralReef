@@ -20,6 +20,7 @@ public class GeneratorReef implements IWorldGenerator {
 
     protected static final NoiseGeneratorOctaves CORAL_REEF_NOISE = new NoiseGeneratorOctaves(new Random(3364), 1);
 
+    public static final int OVERWORLD = 0;
     public static final int CHUNK_SIZE = 16;
 
     private WorldGenerator genReef, genReefRock;
