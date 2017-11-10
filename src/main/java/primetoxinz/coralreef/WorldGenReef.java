@@ -30,7 +30,11 @@ public class WorldGenReef extends WorldGenerator {
 		return world.getBlockState(pos).getMaterial() == material;
 	}
 
+	// basic reef needs at least two blocks of water above it (because coral needs one block above it)
+
 	public static boolean isOceanFloor(World world, BlockPos pos) {
-		return isMaterial(Material.WATER, world, pos.up(1)) && isMaterial(Material.WATER, world, pos.up(2)) && !(isMaterial(Material.WATER, world, pos));
+		return isMaterial(Material.WATER, world, pos.up(1))
+                && isMaterial(Material.WATER, world, pos.up(2))
+                && !(isMaterial(Material.WATER, world, pos));
 	}
 }

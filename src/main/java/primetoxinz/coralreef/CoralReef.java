@@ -67,7 +67,8 @@ public class CoralReef {
     @SubscribeEvent
     public static void registerItem(RegistryEvent.Register<Item> e) {
 	    //noinspection ConstantConditions
-	    e.getRegistry().registerAll(new ItemBlockMeta(CORAL).setRegistryName(CORAL.getRegistryName()), new ItemBlockMeta(REEF).setRegistryName(REEF.getRegistryName()));
+	    e.getRegistry().registerAll(new ItemBlockMeta(CORAL).setRegistryName(CORAL.getRegistryName()),
+                                    new ItemBlockMeta(REEF).setRegistryName(REEF.getRegistryName()));
 	    proxy.registerItems();
     }
 
@@ -81,7 +82,8 @@ public class CoralReef {
 //        OreDictionary.registerOre("dyeGray", new ItemStack(CORAL, 1, 5));
     }
 
-    @SidedProxy(clientSide = "primetoxinz.coralreef.CoralReef$ClientProxy", serverSide = "primetoxinz.coralreef.CoralReef$CommonProxy")
+    @SidedProxy(clientSide = "primetoxinz.coralreef.CoralReef$ClientProxy",
+                serverSide = "primetoxinz.coralreef.CoralReef$CommonProxy")
     public static CommonProxy proxy;
 
     @SubscribeEvent
@@ -92,11 +94,9 @@ public class CoralReef {
     }
 
     public static class CommonProxy {
-        public void registerItems() {
-        }
+        public void registerItems() {}
     }
 
-    @SuppressWarnings("unused")
     public static class ClientProxy extends CommonProxy {
         @Override
         public void registerItems() {

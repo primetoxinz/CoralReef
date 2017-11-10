@@ -39,7 +39,8 @@ public class GeneratorReef implements IWorldGenerator {
 	}
 
 	private void rock(World world, Random rand, int chunkX, int chunkZ) {
-		int x = (chunkX * CHUNK_SIZE) + 8 + rand.nextInt(16), z = (chunkZ * CHUNK_SIZE) + 8 + rand.nextInt(16);
+		int x = (chunkX * CHUNK_SIZE) + 8 + rand.nextInt(16);
+		int z = (chunkZ * CHUNK_SIZE) + 8 + rand.nextInt(16);
 		BlockPos pos = getTop(world, x, z);
 		this.genReefRock.generate(world, rand, pos.up());
 	}
