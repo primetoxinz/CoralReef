@@ -1,10 +1,8 @@
 package primetoxinz.coralreef;
 
-import com.sun.org.apache.regexp.internal.RE;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.config.Config;
@@ -33,17 +31,15 @@ public class CoralReef {
     @Config(modid = MODID)
     public static class ConfigHandler {
 
-        @Config.Comment("Chance for a Reef to generate in a chunk")
-        public static int reefChance = 30;
-
-        @Config.Comment("Number of blocks in a Reef")
-        public static int reefCount = 32;
+        @Config.Comment("Array of dimension ids in which Coral Reefs will spawn")
+        public static int[] dimensions = new int[]{0};
 
         @Config.Comment("Light level of coral")
+        @Config.RequiresMcRestart
         public static int coralLightLevel = 15;
 
-        @Config.Comment("Only spawn in Oceans")
-        public static boolean onlyOcean = false;
+        @Config.Comment(value = "Array of biomes which will allow coral reefs to spawn if there is water.")
+        public static String[] biomes = new String[]{"ocean", "deep ocean"};
 
         @Config.Comment("Bubble Particles from coral")
         public static boolean bubbles = true;
@@ -74,12 +70,12 @@ public class CoralReef {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent e) {
-//        OreDictionary.registerOre("dyeOrange", new ItemStack(CORAL, 1, 0));
-//        OreDictionary.registerOre("dyeMagenta", new ItemStack(CORAL, 1, 1));
-//        OreDictionary.registerOre("dyePink", new ItemStack(CORAL, 1, 2));
-//        OreDictionary.registerOre("dyeCyan", new ItemStack(CORAL, 1, 3));
-//        OreDictionary.registerOre("dyeGreen", new ItemStack(CORAL, 1, 4));
-//        OreDictionary.registerOre("dyeGray", new ItemStack(CORAL, 1, 5));
+        OreDictionary.registerOre("dyeOrange", new ItemStack(CORAL, 1, 0));
+        OreDictionary.registerOre("dyeMagenta", new ItemStack(CORAL, 1, 1));
+        OreDictionary.registerOre("dyePink", new ItemStack(CORAL, 1, 2));
+        OreDictionary.registerOre("dyeCyan", new ItemStack(CORAL, 1, 3));
+        OreDictionary.registerOre("dyeGreen", new ItemStack(CORAL, 1, 4));
+        OreDictionary.registerOre("dyeGray", new ItemStack(CORAL, 1, 5));
     }
 
     @SidedProxy(clientSide = "primetoxinz.coralreef.CoralReef$ClientProxy",
