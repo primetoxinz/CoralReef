@@ -12,32 +12,32 @@ import java.util.Random;
  * Created by primetoxinz on 7/16/17.
  */
 public class WorldGenReef extends WorldGenerator {
-	private final IBlockState state;
+    private final IBlockState state;
 
-	public WorldGenReef(IBlockState state) {
-		this.state = state;
-	}
+    public WorldGenReef(IBlockState state) {
+        this.state = state;
+    }
 
-	public boolean generate(World worldIn, Random rand, BlockPos pos) {
-		if (isOceanFloor(worldIn, pos)) {
-			if(rand.nextInt(10) != 0) {
-				worldIn.setBlockState(pos, state);
-				if(rand.nextInt(10) != 0)
-					CoralReef.CORAL.placeAt(worldIn, pos.up());
-			}
-		}
-		return true;
-	}
+    public boolean generate(World worldIn, Random rand, BlockPos pos) {
+        if (isOceanFloor(worldIn, pos)) {
+            if (rand.nextDouble() <= CoralReef.ConfigHandler.reef.reefSparsity) {
+                worldIn.setBlockState(pos, state);
+                if (rand.nextDouble() <= CoralReef.ConfigHandler.reef.coralSparsity)
+                    CoralReef.CORAL.placeAt(worldIn, pos.up());
+            }
+        }
+        return true;
+    }
 
-	public static boolean isMaterial(Material material, World world, BlockPos pos) {
-		return world.getBlockState(pos).getMaterial() == material;
-	}
+    public static boolean isMaterial(Material material, World world, BlockPos pos) {
+        return world.getBlockState(pos).getMaterial() == material;
+    }
 
-	// basic reef needs at least two blocks of water above it (because coral needs one block above it)
+    // basic reef needs at least two blocks of water above it (because coral needs one block above it)
 
-	public static boolean isOceanFloor(World world, BlockPos pos) {
-		return isMaterial(Material.WATER, world, pos.up(1))
+    public static boolean isOceanFloor(World world, BlockPos pos) {
+        return isMaterial(Material.WATER, world, pos.up(1))
                 && isMaterial(Material.WATER, world, pos.up(2))
                 && !(isMaterial(Material.WATER, world, pos));
-	}
+    }
 }
