@@ -4,7 +4,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -39,16 +39,20 @@ public class GeneratorReef implements IWorldGenerator {
 	}
 
 	private void rock(World world, Random rand, int chunkX, int chunkZ) {
-		int x = (chunkX * CHUNK_SIZE) + 8 + rand.nextInt(16), z = (chunkZ * CHUNK_SIZE) + 8 + rand.nextInt(16);
+		int x = (chunkX * CHUNK_SIZE) + 8 + rand.nextInt(16);
+		int z = (chunkZ * CHUNK_SIZE) + 8 + rand.nextInt(16);
 		BlockPos pos = getTop(world, x, z);
 		this.genReefRock.generate(world, rand, pos.up());
 	}
 
 	private void reef(World world, Random rand, int chunkX, int chunkZ) {
-		noise = CORAL_REEF_NOISE.generateNoiseOctaves(noise, chunkX * CHUNK_SIZE, 0, chunkZ * CHUNK_SIZE, 16, 1, 16, 0.03125D, 0.03125D, 1.0D);
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				double d = this.noise[x + z * CHUNK_SIZE] + rand.nextDouble() * 0.2D;
+		noise = CORAL_REEF_NOISE.generateNoiseOctaves(noise,
+				chunkX * CHUNK_SIZE, 0, chunkZ * CHUNK_SIZE, // noise offset (for matching edges)
+				CHUNK_SIZE, 1, CHUNK_SIZE,                   // array size
+				0.03125D, 1.0, 0.03125D);                    // noise scale
+		for (int x = 0; x < CHUNK_SIZE; x++) {
+			for (int z = 0; z < CHUNK_SIZE; z++) {
+				double d = this.noise[x * CHUNK_SIZE + z] + rand.nextDouble() * 0.2D;
 				if (d > 0)
 					genReef.generate(world, rand, getTop(world,(chunkX * CHUNK_SIZE) + x + 8,  (chunkZ * CHUNK_SIZE) + z + 8));
 			}
