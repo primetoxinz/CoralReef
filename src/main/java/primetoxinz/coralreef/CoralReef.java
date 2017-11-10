@@ -31,18 +31,37 @@ public class CoralReef {
     @Config(modid = MODID)
     public static class ConfigHandler {
 
-        @Config.Comment("Array of dimension ids in which Coral Reefs will spawn")
+        @Config.Comment("Array of dimension ids in which Coral Reefs will spawn. Empty will allow all dimensions")
         public static int[] dimensions = new int[]{0};
 
         @Config.Comment("Light level of coral")
         @Config.RequiresMcRestart
         public static int coralLightLevel = 15;
 
-        @Config.Comment(value = "Array of biomes which will allow coral reefs to spawn if there is water.")
+        @Config.Comment(value = "Array of biomes which will allow coral reefs to spawn if there is water. Empty will allow all biomes")
         public static String[] biomes = new String[]{"ocean", "deep ocean"};
 
         @Config.Comment("Bubble Particles from coral")
         public static boolean bubbles = true;
+
+        public static Reef reef = new Reef();
+
+        public static Rock rock = new Rock();
+
+        public static class Reef {
+            @Config.RangeDouble(min = 0, max = 1)
+            @Config.Comment("Percentage of the sparsity of the coral on a reef")
+            public double coralSparsity = 0.9;
+
+            @Config.RangeDouble(min = 0, max = 1)
+            @Config.Comment("Percentage of the sparsity of the reef blocks")
+            public double reefSparsity = 0.9;
+        }
+
+        public static class Rock {
+            @Config.Comment("Chance for a Dry Reef to spawn")
+            public double chance = 0.5;
+        }
 
     }
 
