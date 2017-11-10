@@ -11,7 +11,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
@@ -24,7 +23,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -38,8 +36,9 @@ import static net.minecraft.util.EnumFacing.WEST;
  * Created by tyler on 8/17/16.
  */
 public class BlockCoral extends Block implements IPlantable {
+    public static final int NTYPES = 6;
     public static final EnumPlantType CORAL = EnumPlantType.getPlantType("Coral");
-    public static final PropertyInteger TYPES = PropertyInteger.create("types", 0, 5);
+    public static final PropertyInteger TYPES = PropertyInteger.create("types", 0, NTYPES-1);
     protected static final AxisAlignedBB CORAL_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
 
     public BlockCoral() {
@@ -51,24 +50,45 @@ public class BlockCoral extends Block implements IPlantable {
         setDefaultState(getDefaultState().withProperty(TYPES, 0).withProperty(BlockLiquid.LEVEL, 15));
     }
 
+    // these are not limited to height 1
+    public boolean highVariant(int variant) {
+        return variant > 3;
+    }
+
     public boolean placeAt(World world, BlockPos bottom) {
         boolean placed = false;
         if (canPlaceBlockAt(world, bottom)) {
-            int variant = world.rand.nextInt(6);
-            if (variant > 3) {
+            int variant = world.rand.nextInt(NTYPES);
+            if (highVariant(variant)) {
                 int height = world.rand.nextInt(4);
                 for (int i = 0; i < height; i++) {
-                    BlockPos next = bottom.up(i);
-                    if (world.getBlockState(next.up()).getMaterial() == Material.WATER)
-                        placed = world.setBlockState(bottom.up(i), getDefaultState().withProperty(TYPES, variant), 3);
+                    BlockPos bp = bottom.up(i);
+                    if (world.getBlockState(bp.up()).getMaterial() == Material.WATER)
+                        placed = world.setBlockState(bp, getDefaultState().withProperty(TYPES, variant));
+                    else {
+                        break;
+                    }
                 }
             } else {
-                placed = world.setBlockState(bottom, getDefaultState().withProperty(TYPES, variant), 3);
+                placed = world.setBlockState(bottom, getDefaultState().withProperty(TYPES, variant));
             }
         }
         return placed;
     }
 
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+        IBlockState state = worldIn.getBlockState(pos.down());
+        Block block = state.getBlock();
+
+        if (worldIn.getBlockState(pos.up()).getMaterial() != Material.WATER) return false;
+        if (block.canSustainPlant(state, worldIn, pos.down(), EnumFacing.UP, this)) return true;
+        if (block == this) {
+            int variant = state.getValue(TYPES);
+            return highVariant(variant);
+        }
+        return false;
+    }
 
     @Override
     public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
@@ -77,7 +97,7 @@ public class BlockCoral extends Block implements IPlantable {
 
     @Override
     public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
-        for (int i = 0; i <= 5; ++i) {
+        for (int i = 0; i < NTYPES; ++i) {
             list.add(new ItemStack(this, 1, i));
         }
     }
@@ -113,7 +133,6 @@ public class BlockCoral extends Block implements IPlantable {
         return CORAL_AABB;
     }
 
-
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         this.checkAndDropBlock(worldIn, pos, state);
@@ -134,28 +153,16 @@ public class BlockCoral extends Block implements IPlantable {
             return true;
         } else {
             this.dropBlockAsItem(worldIn, pos, state, 0);
-            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+            worldIn.setBlockState(pos, Blocks.AIR.getDefaultState());
             return false;
         }
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-        IBlockState state = worldIn.getBlockState(pos.down());
-        Block block = state.getBlock();
-
-        if (worldIn.getBlockState(pos.up(2)).getMaterial() != Material.WATER) return false;
-        if (block.canSustainPlant(state, worldIn, pos.down(), EnumFacing.UP, this)) return true;
-        if (block == this) {
-            int variant = state.getValue(TYPES);
-            return variant > 3;
-        }
-        return false;
     }
 
     @SideOnly(Side.CLIENT)
     @Override
     public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
+
+        // render bubbles
         if (CoralReef.ConfigHandler.bubbles && world.getBlockState(pos.up()).getMaterial() == Material.WATER) {
             double offset = 0.0625D;
             for (int i = 0; i < 6; i++) {
@@ -230,6 +237,4 @@ public class BlockCoral extends Block implements IPlantable {
     public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
         return world.getBlockState(pos);
     }
-
-
 }
