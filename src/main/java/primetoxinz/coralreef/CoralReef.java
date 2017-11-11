@@ -39,7 +39,7 @@ public class CoralReef {
         public static int coralLightLevel = 15;
 
         @Config.Comment(value = "Array of biomes which will allow coral reefs to spawn if there is water. Empty will allow all biomes")
-        public static String[] biomes = new String[]{"ocean", "deep ocean"};
+        public static String[] biomes = new String[]{"ocean", "deep ocean", "beach"};
 
         @Config.Comment("Bubble Particles from coral")
         public static boolean bubbles = true;
