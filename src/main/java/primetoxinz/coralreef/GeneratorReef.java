@@ -75,13 +75,16 @@ public class GeneratorReef implements IWorldGenerator {
     }
 
     public static BlockPos getTop(World world, int x, int z) {
+
         Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
         BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(world.getTopSolidOrLiquidBlock(
                 new BlockPos(x, 0, z)));
 
+        // proceed as per getTopSolidOrLiquidBlock, but additionally walk through ice
         for (; blockPos.getY() >= 0; blockPos.setY(blockPos.getY() - 1)) {
             IBlockState state = chunk.getBlockState(blockPos);
             if (state.getMaterial().blocksMovement()
+                    && state.getMaterial() != Material.ICE
                     && state.getMaterial() != Material.LEAVES
                     && !state.getBlock().isFoliage(world, blockPos)) {
                 break;
