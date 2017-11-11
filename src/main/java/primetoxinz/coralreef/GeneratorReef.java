@@ -51,7 +51,7 @@ public class GeneratorReef implements IWorldGenerator {
     }
 
     // figure out for current chunk of noise whether it should spawn a reef or not
-    private boolean reefFromNoise(int x, int z, Random rand) {
+    private boolean reefFromNoise(int x, int y, int z, Random rand) {
         double d = this.noise[x * CHUNK_SIZE + z] / OCTAVES; // : (-1,1)
         d -= rand.nextDouble() * 0.1; // add a bit of fine noise to blur edges
         d = Math.pow(d, 5); // isolate outliers (magnitude < 0.5 tends to 0 as power increases)
@@ -65,9 +65,8 @@ public class GeneratorReef implements IWorldGenerator {
                 NOISE_SCALE, 1.0, NOISE_SCALE);                 // noise scale
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                if (reefFromNoise(x, z, rand)) {
-                    BlockPos pos = getTop(world, (chunkX * CHUNK_SIZE) + x + 8, (chunkZ * CHUNK_SIZE) + z + 8);
-
+                BlockPos pos = getTop(world, (chunkX * CHUNK_SIZE) + x + 8, (chunkZ * CHUNK_SIZE) + z + 8);
+                if (reefFromNoise(x, pos.getY(), z, rand)) {
                     if (ArrayUtils.isEmpty(CoralReef.ConfigHandler.biomes) || ArrayUtils.contains(CoralReef.ConfigHandler.biomes, world.getBiome(pos).getBiomeName().toLowerCase()))
                         genReef.generate(world, rand, pos);
                 }
