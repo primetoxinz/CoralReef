@@ -53,9 +53,19 @@ public class GeneratorReef implements IWorldGenerator {
     // figure out for current chunk of noise whether it should spawn a reef or not
     private boolean reefFromNoise(int x, int y, int z, Random rand) {
         double d = this.noise[x * CHUNK_SIZE + z] / OCTAVES; // : (-1,1)
+
+        // tune based on height; at sea level probability should be higher,
+        // since that's where corals like to live, but then probability drops
+        // until reducing to zero at depth 50 below sea level
+        int seaLevel = 64;
+        double ybelow = (double) Math.max(0, seaLevel - y);
+
+        // exponential decay, fast falloff (0 change at depth 50, 0.25 chance at depth 35, 4x chance at depth 0)
+        d *= 0.0001810*ybelow*ybelow - 0.1705*ybelow + 4;
+
         d -= rand.nextDouble() * 0.1; // add a bit of fine noise to blur edges
         d = Math.pow(d, 5); // isolate outliers (magnitude < 0.5 tends to 0 as power increases)
-        return (d > 0.01); // cut away what ended up near 0, creating "islands" of reef
+        return (d > 0.005); // cut away what ended up near 0, creating "islands" of reef
     }
 
     private void reef(World world, Random rand, int chunkX, int chunkZ) {
