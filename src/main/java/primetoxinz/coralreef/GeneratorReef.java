@@ -19,7 +19,7 @@ import java.util.Random;
  */
 public class GeneratorReef implements IWorldGenerator {
 
-    protected static final int OCTAVES = 1;
+    protected static final int OCTAVES = 2;
     protected static final double NOISE_SCALE = 0.03125D;
 
     protected static final NoiseGeneratorOctaves CORAL_REEF_NOISE = new NoiseGeneratorOctaves(new Random(3364), OCTAVES);
@@ -50,9 +50,12 @@ public class GeneratorReef implements IWorldGenerator {
         this.genReefRock.generate(world, rand, pos.up());
     }
 
+    // figure out for current chunk of noise whether it should spawn a reef or not
     private boolean reefFromNoise(int x, int z, Random rand) {
-        double d = this.noise[x * CHUNK_SIZE + z] / OCTAVES + rand.nextDouble() * 0.2D;
-        return (d > 0);
+        double d = this.noise[x * CHUNK_SIZE + z] / OCTAVES; // : (-1,1)
+        d -= rand.nextDouble() * 0.1; // add a bit of fine noise to blur edges
+        d = Math.pow(d, 5); // isolate outliers (magnitude < 0.5 tends to 0 as power increases)
+        return (d > 0.01); // cut away what ended up near 0, creating "islands" of reef
     }
 
     private void reef(World world, Random rand, int chunkX, int chunkZ) {
