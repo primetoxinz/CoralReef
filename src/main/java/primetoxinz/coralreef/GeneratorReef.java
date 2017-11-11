@@ -1,5 +1,6 @@
 package primetoxinz.coralreef;
 
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -67,10 +68,14 @@ public class GeneratorReef implements IWorldGenerator {
 
     public static BlockPos getTop(World world, int x, int z) {
         Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, 0, z));
-        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(x, chunk.getTopFilledSegment(), z);
+        BlockPos.MutableBlockPos blockPos = new BlockPos.MutableBlockPos(world.getTopSolidOrLiquidBlock(
+                new BlockPos(x, 0, z)));
+
         for (; blockPos.getY() >= 0; blockPos.setY(blockPos.getY() - 1)) {
             IBlockState state = chunk.getBlockState(blockPos);
-            if (state.getMaterial().isSolid() && !state.getBlock().isLeaves(state, world, blockPos) && !state.getBlock().isFoliage(world, blockPos)) {
+            if (state.getMaterial().blocksMovement()
+                    && state.getMaterial() != Material.LEAVES
+                    && !state.getBlock().isFoliage(world, blockPos)) {
                 break;
             }
         }
