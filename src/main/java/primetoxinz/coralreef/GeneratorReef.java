@@ -19,13 +19,15 @@ import java.util.Random;
  */
 public class GeneratorReef implements IWorldGenerator {
 
-    protected static final NoiseGeneratorOctaves CORAL_REEF_NOISE = new NoiseGeneratorOctaves(new Random(3364), 1);
+    protected static final int OCTAVES = 1;
+    protected static final double NOISE_SCALE = 0.03125D;
 
-    public static final int OVERWORLD = 0;
+    protected static final NoiseGeneratorOctaves CORAL_REEF_NOISE = new NoiseGeneratorOctaves(new Random(3364), OCTAVES);
+
     public static final int CHUNK_SIZE = 16;
 
     private WorldGenerator genReef, genReefRock;
-    private double[] noise = new double[256];
+    private double[] noise = new double[CHUNK_SIZE * CHUNK_SIZE];
 
     public GeneratorReef() {
         this.genReef = new WorldGenReef(CoralReef.REEF.getDefaultState().withProperty(BlockReef.TYPES, 0));
@@ -48,15 +50,19 @@ public class GeneratorReef implements IWorldGenerator {
         this.genReefRock.generate(world, rand, pos.up());
     }
 
+    private boolean reefFromNoise(int x, int z, Random rand) {
+        double d = this.noise[x * CHUNK_SIZE + z] / OCTAVES + rand.nextDouble() * 0.2D;
+        return (d > 0);
+    }
+
     private void reef(World world, Random rand, int chunkX, int chunkZ) {
         noise = CORAL_REEF_NOISE.generateNoiseOctaves(noise,
-                chunkX * CHUNK_SIZE, 0, chunkZ * CHUNK_SIZE,  // noise offset (for matching edges)
-                CHUNK_SIZE, 1, CHUNK_SIZE,                                         // array size
-                0.03125D, 1.0, 0.03125D);                       // noise scale
+                chunkX * CHUNK_SIZE, 0, chunkZ * CHUNK_SIZE,    // noise offset (for matching edges)
+                CHUNK_SIZE, 1, CHUNK_SIZE,                      // array size
+                NOISE_SCALE, 1.0, NOISE_SCALE);                 // noise scale
         for (int x = 0; x < CHUNK_SIZE; x++) {
             for (int z = 0; z < CHUNK_SIZE; z++) {
-                double d = this.noise[x * CHUNK_SIZE + z] + rand.nextDouble() * 0.2D;
-                if (d > 0) {
+                if (reefFromNoise(x, z, rand)) {
                     BlockPos pos = getTop(world, (chunkX * CHUNK_SIZE) + x + 8, (chunkZ * CHUNK_SIZE) + z + 8);
 
                     if (ArrayUtils.isEmpty(CoralReef.ConfigHandler.biomes) || ArrayUtils.contains(CoralReef.ConfigHandler.biomes, world.getBiome(pos).getBiomeName().toLowerCase()))
@@ -81,5 +87,4 @@ public class GeneratorReef implements IWorldGenerator {
         }
         return blockPos;
     }
-
 }
