@@ -77,7 +77,7 @@ public class GeneratorReef implements IWorldGenerator {
             for (int z = 0; z < CHUNK_SIZE; z++) {
                 BlockPos pos = getTop(world, (chunkX * CHUNK_SIZE) + x + 8, (chunkZ * CHUNK_SIZE) + z + 8);
                 if (reefFromNoise(x, pos.getY(), z, rand)) {
-                    if (ArrayUtils.isEmpty(CoralReef.ConfigHandler.biomes) || ArrayUtils.contains(CoralReef.ConfigHandler.biomes, world.getBiome(pos).getBiomeName().toLowerCase()))
+                    if (ArrayUtils.isEmpty(CoralReef.ConfigHandler.biomes) || ArrayUtils.contains(CoralReef.ConfigHandler.biomes, world.getBiome(pos).getRegistryName().getResourcePath().toLowerCase()))
                         genReef.generate(world, rand, pos);
                 }
             }
