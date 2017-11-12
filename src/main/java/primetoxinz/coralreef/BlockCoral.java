@@ -109,7 +109,7 @@ public class BlockCoral extends Block implements IPlantable {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{ LEVEL, TYPES });
+        return new BlockStateContainer(this, new IProperty[]{LEVEL, TYPES });
     }
 
     @Override
