@@ -5,7 +5,6 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -40,7 +39,6 @@ public class BlockCoral extends Block implements IPlantable {
     public static final int NTYPES = 6;
     public static final EnumPlantType CORAL = EnumPlantType.getPlantType("Coral");
     public static final PropertyInteger TYPES = PropertyInteger.create("types", 0, NTYPES-1);
-    public static final PropertyBool INVENTORY = PropertyBool.create("inventory");
     protected static final AxisAlignedBB CORAL_AABB = new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 1.0D, 0.875D);
 
     public BlockCoral() {
@@ -49,7 +47,7 @@ public class BlockCoral extends Block implements IPlantable {
         setCreativeTab(CreativeTabs.MISC);
         setHardness(0.0F);
         setSoundType(SoundType.PLANT);
-        setDefaultState(getDefaultState().withProperty(INVENTORY, false).withProperty(TYPES, 0).withProperty(BlockLiquid.LEVEL, 15));
+        setDefaultState(getDefaultState().withProperty(TYPES, 0).withProperty(BlockLiquid.LEVEL, 15));
     }
 
     // these are not limited to height 1
@@ -111,7 +109,7 @@ public class BlockCoral extends Block implements IPlantable {
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, new IProperty[]{INVENTORY, LEVEL, TYPES });
+        return new BlockStateContainer(this, new IProperty[]{ LEVEL, TYPES });
     }
 
     @Override
