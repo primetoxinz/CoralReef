@@ -1,71 +1,17 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures": {
-      "cross": "coralreef:blocks/coral1"
-    },
     "model": "cross",
     "uvlock": true
   },
   "variants": {
-    "normal": [
-      {
-      }
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-item"
-      }
-    ],
     "types": {
-      "0": {
-        "textures": {
-          "cross": "coralreef:blocks/coral1"
-        }
-      },
-      "1": {
-        "textures": {
-          "cross": "coralreef:blocks/coral2"
-        }
-      },
-      "2": {
-        "textures": {
-          "cross": "coralreef:blocks/coral3"
-        }
-      },
-      "3": {
-        "textures": {
-          "cross": "coralreef:blocks/coral4"
-        }
-      },
-      "4": {
-        "textures": {
-          "cross": "coralreef:blocks/coral5"
-        }
-      },
-      "5": {
-        "textures": {
-          "cross": "coralreef:blocks/coral6"
-        }
-      }
-    },
-    "level": {
-      "0": {},
-      "1": {},
-      "2": {},
-      "3": {},
-      "4": {},
-      "5": {},
-      "6": {},
-      "7": {},
-      "8": {},
-      "9": {},
-      "10": {},
-      "11": {},
-      "12": {},
-      "13": {},
-      "14": {},
-      "15": {}
+      "0": { "textures": { "cross": "coralreef:blocks/coral1" } },
+      "1": { "textures": { "cross": "coralreef:blocks/coral2" } },
+      "2": { "textures": { "cross": "coralreef:blocks/coral3" } },
+      "3": { "textures": { "cross": "coralreef:blocks/coral4" } },
+      "4": { "textures": { "cross": "coralreef:blocks/coral5" } },
+      "5": { "textures": { "cross": "coralreef:blocks/coral6" } }
     }
   }
 }
