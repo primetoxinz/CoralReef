@@ -119,7 +119,7 @@ public class CoralReef {
         public void registerItems() {
             ModelLoader.setCustomStateMapper(CORAL, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
             for (int i = 0; i <= 5; i++) {
-                registerItemModel(Item.getItemFromBlock(CORAL), i, "coralreef:coral","inventory=true,level=0,types="+i);
+                registerItemModel(Item.getItemFromBlock(CORAL), i, "coralreef:coral","inventory=true,types="+i);
             }
             for (int i = 0; i <= 1; i++) {
                 registerItemModel(Item.getItemFromBlock(REEF), i, "coralreef:reef","types="+i);

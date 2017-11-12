@@ -1,10 +1,6 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures": {
-      "cross": "coralreef:blocks/coral1",
-      "layer0": "coralreef:blocks/coral1"
-    },
     "uvlock": true
   },
   "variants": {
