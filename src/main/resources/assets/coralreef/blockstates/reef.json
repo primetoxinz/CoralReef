@@ -1,22 +1,11 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "textures": {
-      "all": "coralreef:blocks/reef1"
-    },
     "model": "cube_all",
+    "transform": "forge:default-block",
     "uvlock": true
   },
   "variants": {
-    "normal": [
-      {
-      }
-    ],
-    "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
-    ],
     "types": {
       "0": {
         "textures": {

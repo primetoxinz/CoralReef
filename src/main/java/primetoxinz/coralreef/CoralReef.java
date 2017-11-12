@@ -1,7 +1,9 @@
 package primetoxinz.coralreef;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.model.ModelLoader;
@@ -115,8 +117,9 @@ public class CoralReef {
     public static class ClientProxy extends CommonProxy {
         @Override
         public void registerItems() {
+            ModelLoader.setCustomStateMapper(CORAL, new StateMap.Builder().ignore(BlockLiquid.LEVEL).build());
             for (int i = 0; i <= 5; i++) {
-                registerItemModel(Item.getItemFromBlock(CORAL), i, "coralreef:coral","level=0,types="+i);
+                registerItemModel(Item.getItemFromBlock(CORAL), i, "coralreef:coral","inventory=true,level=0,types="+i);
             }
             for (int i = 0; i <= 1; i++) {
                 registerItemModel(Item.getItemFromBlock(REEF), i, "coralreef:reef","types="+i);
