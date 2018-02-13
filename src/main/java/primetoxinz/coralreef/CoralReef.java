@@ -23,7 +23,7 @@ import net.minecraftforge.oredict.OreDictionary;
  * Created by tyler on 8/17/16.
  */
 @Mod.EventBusSubscriber(modid = CoralReef.MODID)
-@Mod(modid = CoralReef.MODID, name = CoralReef.NAME, version = CoralReef.VERSION)
+@Mod(modid = CoralReef.MODID, name = CoralReef.NAME, version = CoralReef.VERSION, acceptedMinecraftVersions = "[1.12, 1.13)")
 public class CoralReef {
 
     public static final String MODID = "coralreef";
