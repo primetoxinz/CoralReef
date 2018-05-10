@@ -9,7 +9,7 @@ buildscript {
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
 
-version = "2.4-1.12.2"
+version = "2.5-1.12.2"
 group = "coralreef" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "CoralReef"
 
