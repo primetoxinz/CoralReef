@@ -12,7 +12,6 @@
     "sources": "https://github.com/primetoxinz/CoralReef"
   },
   "license": "Insert License Here",
-  "icon": "assets/examplemod/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [

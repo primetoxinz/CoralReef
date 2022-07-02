@@ -7,6 +7,7 @@ public class CoralReefModFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         CoralReef.init();
+        CoralReef.postInit();
     }
 
 

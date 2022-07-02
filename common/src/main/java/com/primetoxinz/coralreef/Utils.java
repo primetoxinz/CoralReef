@@ -1,6 +1,7 @@
 package com.primetoxinz.coralreef;
 
 import dev.architectury.hooks.level.biome.*;
+import dev.architectury.registry.registries.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.function.*;
@@ -30,6 +31,10 @@ public class Utils {
         } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
             return Optional.empty();
         }
+    }
+
+    public static <T> Holder.Direct<T> holder(RegistrySupplier<T> registrySupplier) {
+        return new Holder.Direct<>(registrySupplier.get());
     }
 
     private static boolean hasTag(Biome biome, TagKey<Biome> tag) {

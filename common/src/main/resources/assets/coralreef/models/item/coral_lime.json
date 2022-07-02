@@ -1,4 +1,7 @@
 
 {
-  "parent": "coralreef:block/coral_lime"
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "coralreef:block/coral_lime"
+  }
 }

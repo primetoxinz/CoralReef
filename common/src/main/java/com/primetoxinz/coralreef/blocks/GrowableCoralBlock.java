@@ -56,18 +56,11 @@ public class GrowableCoralBlock extends Block implements LiquidBlockContainer {
 
 
     public boolean canSurvive(BlockState blockState, LevelReader levelReader, BlockPos blockPos) {
-        if(true) {
-            return true;
-        }
         BlockState blockState2 = levelReader.getBlockState(blockPos.below());
         if (blockState2.is(this) && blockState2.getFluidState().is(Fluids.WATER)) {
             return true;
         } else {
-            if (blockState2.is(CoralReef.REEF_BASE_BLOCK_TAG) && blockState.getFluidState().is(Fluids.WATER)) {
-                return true;
-            }
-
-            return false;
+            return blockState2.is(CoralReef.REEF_BASE_BLOCK_TAG) && blockState.getFluidState().is(Fluids.WATER);
         }
     }
 
@@ -93,12 +86,10 @@ public class GrowableCoralBlock extends Block implements LiquidBlockContainer {
     }
 
     public BlockState updateShape(BlockState blockState, Direction direction, BlockState blockState2, LevelAccessor levelAccessor, BlockPos blockPos, BlockPos blockPos2) {
-        BlockState blockState3 = super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
-        if (!blockState3.isAir()) {
-            levelAccessor.scheduleTick(blockPos, Fluids.WATER, Fluids.WATER.getTickDelay(levelAccessor));
+        if (!blockState.canSurvive(levelAccessor, blockPos)) {
+            levelAccessor.scheduleTick(blockPos, this, 1);
         }
-
-        return blockState3;
+        return super.updateShape(blockState, direction, blockState2, levelAccessor, blockPos, blockPos2);
     }
 
 
