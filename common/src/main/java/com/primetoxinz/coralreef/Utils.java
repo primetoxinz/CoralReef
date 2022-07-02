@@ -7,6 +7,7 @@ import java.util.*;
 import java.util.function.*;
 import net.minecraft.core.*;
 import net.minecraft.tags.*;
+import net.minecraft.util.*;
 import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.*;
@@ -14,11 +15,11 @@ import net.minecraft.world.level.block.state.*;
 public class Utils {
 
 
-    public static <T> Optional<T> getRandomTagElement(MappedRegistry<T> r, TagKey<T> tag, Random random) {
+    public static <T> Optional<T> getRandomTagElement(MappedRegistry<T> r, TagKey<T> tag, RandomSource random) {
         return r.getTag(tag).flatMap((argx) -> argx.getRandomElement(random)).map(Holder::value);
     }
 
-    public static Optional<BlockState> getRandomTagBlockState(MappedRegistry<Block> r, TagKey<Block> tag, Random random, Function<Block, BlockState> state) {
+    public static Optional<BlockState> getRandomTagBlockState(MappedRegistry<Block> r, TagKey<Block> tag, RandomSource random, Function<Block, BlockState> state) {
         return getRandomTagElement(r, tag, random).map(state);
     }
 

@@ -6,6 +6,7 @@ import net.minecraft.core.*;
 import net.minecraft.core.particles.*;
 import net.minecraft.server.level.*;
 import net.minecraft.tags.*;
+import net.minecraft.util.*;
 import net.minecraft.world.item.context.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
@@ -22,9 +23,8 @@ public class CoralBlock extends BushBlock implements LiquidBlockContainer {
     public CoralBlock(BlockBehaviour.Properties properties) {
         super(properties);
     }
-
     @Override
-    public void animateTick(BlockState blockState, Level world, BlockPos pos, Random rand) {
+    public void animateTick(BlockState blockState, Level world, BlockPos pos, RandomSource rand) {
         // render bubbles
         if (world.getBlockState(pos.above()).is(Blocks.WATER)) {
             double offset = 0.0625D;

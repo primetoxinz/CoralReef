@@ -6,6 +6,7 @@ import com.primetoxinz.coralreef.blocks.*;
 import java.util.*;
 import net.minecraft.core.*;
 import net.minecraft.tags.*;
+import net.minecraft.util.*;
 import net.minecraft.world.level.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.*;
@@ -22,76 +23,69 @@ public class ReefBaseFeature extends Feature<DiskConfiguration> {
         super(codec);
     }
 
-    public boolean place(FeaturePlaceContext<DiskConfiguration> arg) {
-        if (!arg.level().getFluidState(arg.origin()).is(FluidTags.WATER)) {
-            return false;
+    protected boolean placeColumn(DiskConfiguration diskConfiguration, WorldGenLevel worldGenLevel, RandomSource randomSource, int i, int j, BlockPos.MutableBlockPos mutableBlockPos) {
+        boolean bl = false;
+        BlockState blockState = null;
+
+        for (int k = i; k > j; --k) {
+            mutableBlockPos.setY(k);
+            if (diskConfiguration.target().test(worldGenLevel, mutableBlockPos)) {
+                BlockState blockState2 = diskConfiguration.stateProvider().getState(worldGenLevel, randomSource, mutableBlockPos);
+                worldGenLevel.setBlock(mutableBlockPos, blockState2, 2);
+                this.markAboveForPostProcessing(worldGenLevel, mutableBlockPos);
+                bl = true;
+            }
         }
 
-        DiskConfiguration diskConfiguration = arg.config();
-        BlockPos blockPos = arg.origin();
-        WorldGenLevel worldGenLevel = arg.level();
+        if (bl) {
+            BlockState belowState = worldGenLevel.getBlockState(mutableBlockPos);
+            BlockState state = worldGenLevel.getBlockState(mutableBlockPos.above());
+            BlockState aboveState = worldGenLevel.getBlockState(mutableBlockPos.above(2));
+
+            if (belowState.is(CoralReef.REEF_BASE_BLOCK_TAG) && state.is(Blocks.WATER) && aboveState.is(Blocks.WATER)) {
+                if (randomSource.nextDouble() <= coralSparsity) {
+                    placeCoral(randomSource, worldGenLevel, mutableBlockPos.above());
+                }
+            }
+        }
+        return bl;
+    }
+
+    public boolean place(FeaturePlaceContext<DiskConfiguration> featurePlaceContext) {
+
+        DiskConfiguration diskConfiguration = (DiskConfiguration) featurePlaceContext.config();
+        BlockPos blockPos = featurePlaceContext.origin();
+        WorldGenLevel worldGenLevel = featurePlaceContext.level();
+        RandomSource randomSource = featurePlaceContext.random();
         boolean bl = false;
         int i = blockPos.getY();
         int j = i + diskConfiguration.halfHeight();
         int k = i - diskConfiguration.halfHeight() - 1;
-        boolean bl2 = diskConfiguration.state().getBlock() instanceof FallingBlock;
-        int l = diskConfiguration.radius().sample(arg.random());
-        Random random = arg.random();
-        for (int m = blockPos.getX() - l; m <= blockPos.getX() + l; ++m) {
-            for (int n = blockPos.getZ() - l; n <= blockPos.getZ() + l; ++n) {
-                int o = m - blockPos.getX();
-                int p = n - blockPos.getZ();
-                if (o * o + p * p <= l * l) {
-                    boolean bl3 = false;
+        int l = diskConfiguration.radius().sample(randomSource);
+        BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+        Iterator var12 = BlockPos.betweenClosed(blockPos.offset(-l, 0, -l), blockPos.offset(l, 0, l)).iterator();
 
-                    for (int q = j; q >= k; --q) {
-                        BlockPos blockPos2 = new BlockPos(m, q, n);
-                        BlockState blockState = worldGenLevel.getBlockState(blockPos2);
-                        Block block = blockState.getBlock();
-                        boolean bl4 = false;
-                        if (q > k) {
-                            Iterator var21 = diskConfiguration.targets().iterator();
-
-                            while (var21.hasNext()) {
-                                BlockState blockState2 = (BlockState) var21.next();
-                                if (blockState2.is(block) && worldGenLevel.getBlockState(blockPos2.above()).getFluidState().is(Fluids.WATER)) {
-                                    worldGenLevel.setBlock(blockPos2, diskConfiguration.state(), 2);
-                                    this.markAboveForPostProcessing(worldGenLevel, blockPos2);
-                                    BlockState belowState = worldGenLevel.getBlockState(blockPos2);
-                                    BlockState state = worldGenLevel.getBlockState(blockPos2.above());
-                                    BlockState aboveState = worldGenLevel.getBlockState(blockPos2.above(2));
-
-                                    if (belowState.is(CoralReef.REEF_BASE_BLOCK_TAG) && state.is(Blocks.WATER) &&  aboveState.is(Blocks.WATER)) {
-                                        if (random.nextDouble() <= coralSparsity) {
-                                            placeCoral(random, worldGenLevel, blockPos2.above());
-                                        }
-                                    }
-
-                                    bl = true;
-                                    bl4 = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        bl3 = bl4;
-                    }
-                }
+        while (var12.hasNext()) {
+            BlockPos blockPos2 = (BlockPos) var12.next();
+            int m = blockPos2.getX() - blockPos.getX();
+            int n = blockPos2.getZ() - blockPos.getZ();
+            if (m * m + n * n <= l * l) {
+                bl |= this.placeColumn(diskConfiguration, worldGenLevel, randomSource, j, k, mutableBlockPos.set(blockPos2));
             }
         }
 
         return bl;
     }
 
-    public void placeCoral(Random random, WorldGenLevel worldGenLevel, BlockPos blockPos) {
+    public void placeCoral(RandomSource random, WorldGenLevel worldGenLevel, BlockPos blockPos) {
         Utils.getRandomTagBlockState(Registry.BLOCK, CoralReef.REEF_CORAL_TAG, random, Block::defaultBlockState).ifPresent(blockState2 -> {
             worldGenLevel.setBlock(blockPos, blockState2, Block.UPDATE_NONE);
 
-            if(blockState2.getBlock() instanceof GrowableCoralBlock) {
-                var height = random.nextInt(0,3);
-                for(int i = 0; i <= height; i++) {
+            if (blockState2.getBlock() instanceof GrowableCoralBlock) {
+                var height = random.nextInt(0, 3);
+                for (int i = 0; i <= height; i++) {
                     var pos = blockPos.above(i);
-                    if(worldGenLevel.getBlockState(pos).is(Blocks.WATER) && worldGenLevel.getBlockState(pos.above()).is(Blocks.WATER)) {
+                    if (worldGenLevel.getBlockState(pos).is(Blocks.WATER) && worldGenLevel.getBlockState(pos.above()).is(Blocks.WATER)) {
                         worldGenLevel.setBlock(pos, blockState2, 2);
                     }
                 }

@@ -6,6 +6,7 @@ import dev.architectury.registry.registries.*;
 import net.minecraft.core.*;
 import net.minecraft.data.*;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.util.*;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.*;
@@ -26,7 +27,7 @@ public class ReefCoralFeature extends Feature<NoneFeatureConfiguration> {
     public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> featurePlaceContext) {
         WorldGenLevel worldGenLevel = featurePlaceContext.level();
         BlockPos blockPos = featurePlaceContext.origin();
-        Random random = featurePlaceContext.random();
+        RandomSource random = featurePlaceContext.random();
         int j = worldGenLevel.getHeight(Heightmap.Types.OCEAN_FLOOR, blockPos.getX(), blockPos.getZ());
         final BlockPos blockPos2 = new BlockPos(blockPos.getX(), j, blockPos.getZ());
         BlockState belowState = worldGenLevel.getBlockState(blockPos2.below());

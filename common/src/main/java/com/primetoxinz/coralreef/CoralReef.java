@@ -22,8 +22,10 @@ import net.minecraft.world.level.biome.*;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.*;
 import net.minecraft.world.level.levelgen.*;
+import net.minecraft.world.level.levelgen.blockpredicates.*;
 import net.minecraft.world.level.levelgen.feature.*;
 import net.minecraft.world.level.levelgen.feature.configurations.*;
+import net.minecraft.world.level.levelgen.feature.stateproviders.*;
 import net.minecraft.world.level.levelgen.placement.*;
 import net.minecraft.world.level.material.*;
 import org.apache.logging.log4j.*;
@@ -117,15 +119,15 @@ public class CoralReef {
     }
 
     public static void postInit() {
-        Holder<ConfiguredFeature<?, ?>> reefDisk = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_disk", new ConfiguredFeature<>(REEF_BASE.get(), new DiskConfiguration(REEF1_BLOCK.get().defaultBlockState(), UniformInt.of(2, 6), 2, List.of(Blocks.SAND.defaultBlockState(), Blocks.GRAVEL.defaultBlockState(), Blocks.DIRT.defaultBlockState(), Blocks.GRASS_BLOCK.defaultBlockState()))));
+
+        Holder<ConfiguredFeature<?, ?>> reefDisk = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_disk", new ConfiguredFeature<>(
+                REEF_BASE.get(),
+                new DiskConfiguration(RuleBasedBlockStateProvider.simple(REEF1_BLOCK.get()), BlockPredicate.matchesBlocks(List.of(Blocks.DIRT, Blocks.GRASS_BLOCK, Blocks.SAND, Blocks.GRAVEL)), UniformInt.of(2, 3), 1)
+        ));
         Holder<ConfiguredFeature<?, ?>> reefRock = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_rock", new ConfiguredFeature<>(Feature.FOREST_ROCK, new BlockStateConfiguration(REEF2_BLOCK.get().defaultBlockState())));
         Holder<PlacedFeature> reefPlaced = BuiltinRegistries.registerExact(BuiltinRegistries.PLACED_FEATURE, "reef", new PlacedFeature(reefDisk, ImmutableList.of(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome())));
         Holder<PlacedFeature> reefRockPlaced = BuiltinRegistries.registerExact(BuiltinRegistries.PLACED_FEATURE, "reef_rock", new PlacedFeature(reefRock, ImmutableList.of(CountPlacement.of(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
-        var categories = Lists.newArrayList(Biome.BiomeCategory.OCEAN, Biome.BiomeCategory.RIVER);
-        BiomeModifications.addProperties(biomeContext -> {
-            var properties = biomeContext.getProperties();
-            return categories.contains(properties.getCategory());
-        }, (biomeContext, mutable) -> {
+        BiomeModifications.addProperties(biomeContext -> biomeContext.hasTag(HAS_REEF), (biomeContext, mutable) -> {
             GenerationProperties.Mutable mut = mutable.getGenerationProperties();
             mut.addFeature(GenerationStep.Decoration.TOP_LAYER_MODIFICATION, reefPlaced);
             mut.addFeature(GenerationStep.Decoration.LOCAL_MODIFICATIONS, reefRockPlaced);
