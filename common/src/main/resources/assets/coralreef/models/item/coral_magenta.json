@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "coralreef:block/coral_magenta"
+    "layer0": "coralreef:blocks/coral_magenta"
   }
 }
