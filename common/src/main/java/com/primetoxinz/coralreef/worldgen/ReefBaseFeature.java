@@ -29,7 +29,7 @@ public class ReefBaseFeature extends Feature<DiskConfiguration> {
 
         for (int k = i; k > j; --k) {
             mutableBlockPos.setY(k);
-            if (diskConfiguration.target().test(worldGenLevel, mutableBlockPos)) {
+            if (diskConfiguration.target().test(worldGenLevel, mutableBlockPos) && worldGenLevel.getBlockState(mutableBlockPos.above()).is(Blocks.WATER)) {
                 BlockState blockState2 = diskConfiguration.stateProvider().getState(worldGenLevel, randomSource, mutableBlockPos);
                 worldGenLevel.setBlock(mutableBlockPos, blockState2, 2);
                 this.markAboveForPostProcessing(worldGenLevel, mutableBlockPos);
