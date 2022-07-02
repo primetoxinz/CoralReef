@@ -12,7 +12,6 @@ import java.util.*;
 import java.util.function.*;
 import net.minecraft.core.*;
 import net.minecraft.data.*;
-import net.minecraft.data.worldgen.features.*;
 import net.minecraft.data.worldgen.placement.*;
 import net.minecraft.resources.*;
 import net.minecraft.tags.*;
@@ -71,6 +70,7 @@ public class CoralReef {
     public static final TagKey<Biome> HAS_REEF = TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(CoralReef.MOD_ID, "has_reef"));
 
     public static final RegistrySupplier<Feature<DiskConfiguration>> REEF_BASE = FEATURES.register("reef_base", () -> new ReefBaseFeature(DiskConfiguration.CODEC));
+    public static final RegistrySupplier<Feature<BlockStateConfiguration>> REEF_ROCK = FEATURES.register("reef_rock", () -> new ReefRockFeature(BlockStateConfiguration.CODEC));
 //    public static final RegistrySupplier<ConfiguredFeature<?, ?>> REEF_DISK_CONFIG = CoralReef.CONFIGURED_FEATURES.register("reef_disk", CoralReef::createReefDisk);
 //    public static final RegistrySupplier<ConfiguredFeature<?, ?>> REEF_ROCK_CONFIG = CoralReef.CONFIGURED_FEATURES.register("reef_rock", CoralReef::createReefRock);
 //    public static final RegistrySupplier<PlacedFeature> REEF_FEATURE_PLACEMENT = PLACED_FEATURES.register("reef", () -> CoralReef.createReef(Utils.holder(REEF_DISK_CONFIG)));
@@ -117,8 +117,14 @@ public class CoralReef {
     }
 
     public static void postInit() {
-        Holder<ConfiguredFeature<?, ?>> reefDisk = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_disk", new ConfiguredFeature<>(REEF_BASE.get(), new DiskConfiguration(REEF1_BLOCK.get().defaultBlockState(), UniformInt.of(2, 6), 2, List.of(Blocks.SAND.defaultBlockState(), Blocks.GRAVEL.defaultBlockState(), Blocks.DIRT.defaultBlockState(), Blocks.GRASS_BLOCK.defaultBlockState()))));
-        Holder<ConfiguredFeature<?, ?>> reefRock = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_rock", new ConfiguredFeature<>(Feature.FOREST_ROCK, new BlockStateConfiguration(REEF2_BLOCK.get().defaultBlockState())));
+
+
+        Holder<ConfiguredFeature<?, ?>> reefDisk = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_disk", new ConfiguredFeature<>(
+                REEF_BASE.get(),
+                new DiskConfiguration(REEF1_BLOCK.get().defaultBlockState(), UniformInt.of(2, 6), 2, List.of(Blocks.SAND.defaultBlockState(), Blocks.GRAVEL.defaultBlockState(), Blocks.DIRT.defaultBlockState(), Blocks.GRASS_BLOCK.defaultBlockState()))
+        ));
+
+        Holder<ConfiguredFeature<?, ?>> reefRock = BuiltinRegistries.registerExact(BuiltinRegistries.CONFIGURED_FEATURE, "reef_rock", new ConfiguredFeature<>(REEF_ROCK.get(), new BlockStateConfiguration(REEF2_BLOCK.get().defaultBlockState())));
         Holder<PlacedFeature> reefPlaced = BuiltinRegistries.registerExact(BuiltinRegistries.PLACED_FEATURE, "reef", new PlacedFeature(reefDisk, ImmutableList.of(InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP_TOP_SOLID, BiomeFilter.biome())));
         Holder<PlacedFeature> reefRockPlaced = BuiltinRegistries.registerExact(BuiltinRegistries.PLACED_FEATURE, "reef_rock", new PlacedFeature(reefRock, ImmutableList.of(CountPlacement.of(2), InSquarePlacement.spread(), PlacementUtils.HEIGHTMAP, BiomeFilter.biome())));
         var categories = Lists.newArrayList(Biome.BiomeCategory.OCEAN, Biome.BiomeCategory.RIVER);
