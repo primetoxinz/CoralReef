@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cross",
+  "textures": {
+    "cross": "coralreef:blocks/coral_magenta"
+  }
+}

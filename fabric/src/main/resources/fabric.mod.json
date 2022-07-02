@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "coralreef",
+  "version": "${version}",
+  "name": "Coral Reef",
+  "description": "Coral",
+  "authors": [
+    "primetoxinz"
+  ],
+  "contact": {
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/coralreef",
+    "sources": "https://github.com/primetoxinz/CoralReef"
+  },
+  "license": "Insert License Here",
+  "icon": "assets/examplemod/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.primetoxinz.coralreef.fabric.CoralReefModFabric"
+    ],
+    "client": [
+      "com.primetoxinz.coralreef.fabric.CoralReefModFabricClient"
+    ]
+  },
+  "_mixins": [
+    "examplemod.mixins.json",
+    "examplemod-common.mixins.json"
+  ],
+  "depends": {
+    "fabric": "*",
+    "minecraft": ">=1.18.2",
+    "architectury": ">=4.4.70"
+  }
+}

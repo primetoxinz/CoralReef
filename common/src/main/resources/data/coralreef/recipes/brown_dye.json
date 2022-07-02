@@ -1,0 +1,14 @@
+
+{
+  "type": "minecraft:crafting_shapeless",
+  "group": "brown_dye",
+  "ingredients": [
+    {
+      "item": "coralreef:coral_brown"
+    }
+  ],
+  "result": {
+    "item": "minecraft:brown_dye",
+    "count": 1
+  }
+}
